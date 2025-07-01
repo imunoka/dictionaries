@@ -11,3 +11,18 @@ func (d Dictionary) Search(key string) (string, error) {
 
 	return value, nil
 }
+
+func (d Dictionary) Add(key, value string) error {
+	_, err := d.Search(key)
+
+	switch err {
+	case ErrNotFound:
+		d[key] = value
+	case nil:
+		return ErrKeyExists
+	default:
+		return err
+	}
+
+	return nil
+}

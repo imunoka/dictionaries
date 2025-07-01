@@ -26,12 +26,54 @@ func TestDictionary_Search(t *testing.T) {
 	})
 }
 
+func TestDictionary_Add(t *testing.T) {
+	t.Run("new word", func (t *testing.T) {
+		dictionary := Dictionary{}
+		key := "key"
+		value := "value"
+		err := dictionary.Add(key, value)
+
+		assertNoError(t, err)
+		assertValue(t, dictionary, key, value)
+	})
+
+	t.Run("existing word", func (t *testing.T) {
+		key := "key"
+		value := "value"
+		dictionary := Dictionary{key: value}
+		err := dictionary.Add(key, "new value")
+
+		assertError(t, err, ErrKeyExists)
+		assertValue(t, dictionary, key, value)
+	})
+}
+
 func ExampleDictionary_Search() {
 	dictionary := Dictionary{"key": "value"}
 	value, err := dictionary.Search("key")
 
 	if err != nil {
-		fmt.Println("Error:", err)
+		fmt.Println("error:", err)
+		return
+	}
+
+	fmt.Println("Found:", value)
+
+	// Output: Found: value
+}
+
+func ExampleDictionary_Add() {
+	dictionary := Dictionary{}
+	err := dictionary.Add("key", "value")
+
+	if err != nil {
+		fmt.Println("error:", err)
+		return
+	}
+
+	value, err := dictionary.Search("key")
+	if err != nil {
+		fmt.Println("error:", err)
 		return
 	}
 
@@ -66,4 +108,14 @@ func assertNoError(t testing.TB, err error) {
 	if err != nil {
 		t.Fatal("got an error but did not expect one")
 	}
+}
+
+func assertValue(t testing.TB, dictionary Dictionary, key, value string) {
+	t.Helper()
+
+	got, err := dictionary.Search(key)
+	if err != nil {
+		t.Fatal("error:", err)
+	}
+	assertStrings(t, got, value)
 }
