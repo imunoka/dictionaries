@@ -6,7 +6,7 @@ import (
 )
 
 func TestDictionary_Search(t *testing.T) {
-	t.Run("existing word", func (t *testing.T) {
+	t.Run("existing key", func (t *testing.T) {
 		dictionary := Dictionary{"key": "value"}
 		got, err := dictionary.Search("key")
 		want := "value"
@@ -15,7 +15,7 @@ func TestDictionary_Search(t *testing.T) {
 		assertStrings(t, got, want)
 	})
 
-	t.Run("non-existing word", func (t *testing.T) {
+	t.Run("non-existing key", func (t *testing.T) {
 		dictionary := Dictionary{}
 		_, err := dictionary.Search("key")
 		want := ErrNotFound
@@ -25,7 +25,7 @@ func TestDictionary_Search(t *testing.T) {
 }
 
 func TestDictionary_Add(t *testing.T) {
-	t.Run("new word", func (t *testing.T) {
+	t.Run("new key", func (t *testing.T) {
 		dictionary := Dictionary{}
 		key := "key"
 		value := "value"
@@ -35,7 +35,7 @@ func TestDictionary_Add(t *testing.T) {
 		assertValue(t, dictionary, key, value)
 	})
 
-	t.Run("existing word", func (t *testing.T) {
+	t.Run("existing key", func (t *testing.T) {
 		key := "key"
 		value := "value"
 		dictionary := Dictionary{key: value}
@@ -47,7 +47,7 @@ func TestDictionary_Add(t *testing.T) {
 }
 
 func TestDictionary_Update(t *testing.T) {
-	t.Run("existing word", func (t *testing.T) {
+	t.Run("existing key", func (t *testing.T) {
 		key := "key"
 		value := "value"
 		dictionary := Dictionary{key: value}
@@ -58,7 +58,7 @@ func TestDictionary_Update(t *testing.T) {
 		assertValue(t, dictionary, key, newValue)
 	})
 
-	t.Run("non-existing word", func(t *testing.T) {
+	t.Run("non-existing key", func(t *testing.T) {
 		dictionary := Dictionary{}
 		err := dictionary.Update("key", "new value")
 
