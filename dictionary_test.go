@@ -48,6 +48,26 @@ func TestDictionary_Add(t *testing.T) {
 	})
 }
 
+func TestDictionary_Update(t *testing.T) {
+	t.Run("existing word", func (t *testing.T) {
+		key := "key"
+		value := "value"
+		dictionary := Dictionary{key: value}
+		newValue := "new value"
+		err := dictionary.Update(key, newValue)
+
+		assertNoError(t, err)
+		assertValue(t, dictionary, key, newValue)
+	})
+
+	t.Run("non-existing word", func(t *testing.T) {
+		dictionary := Dictionary{}
+		err := dictionary.Update("key", "new value")
+
+		assertError(t, err, ErrKeyDoesNotExist)
+	})
+}
+
 func ExampleDictionary_Search() {
 	dictionary := Dictionary{"key": "value"}
 	value, err := dictionary.Search("key")
@@ -80,6 +100,25 @@ func ExampleDictionary_Add() {
 	fmt.Println("Found:", value)
 
 	// Output: Found: value
+}
+
+func ExampleDictionary_Update() {
+	dictionary := Dictionary{"key": "value"}
+	err := dictionary.Update("key", "new value")
+
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+
+	value, err := dictionary.Search("key")
+	if err != nil {
+		fmt.Println("error:", err)
+		return
+	}
+
+	fmt.Println("Found:", value)
+
+	// Ouput: Found: new value
 }
 
 func assertStrings(t testing.TB, got, want string) {
