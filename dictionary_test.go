@@ -66,6 +66,27 @@ func TestDictionary_Update(t *testing.T) {
 	})
 }
 
+func TestDictionary_Delete(t *testing.T) {
+	t.Run("existing key", func (t *testing.T) {
+		key := "key"
+		dictionary := Dictionary{key: "value"}
+		err := dictionary.Delete(key)
+
+		assertError(t, err, nil)
+
+		_, err = dictionary.Search(key)
+
+		assertError(t, err, ErrNotFound)
+	})
+
+	t.Run("non-existing key", func(t *testing.T) {
+		dictionary := Dictionary{}
+		err := dictionary.Delete("key")
+
+		assertError(t, err, ErrKeyDoesNotExist)
+	})
+}
+
 func ExampleDictionary_Search() {
 	dictionary := Dictionary{"key": "value"}
 	value, err := dictionary.Search("key")
@@ -117,6 +138,23 @@ func ExampleDictionary_Update() {
 	fmt.Println("found:", value)
 
 	// Ouput: found: new value
+}
+
+func ExampleDictionary_Delete() {
+	key := "key"
+	dictionary := Dictionary{key: "value"}
+	err := dictionary.Delete(key)
+
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+
+	_, err = dictionary.Search(key)
+	if err == ErrNotFound {
+		fmt.Println("successfully deleted key/value pair")
+	}
+
+	// Output: successfully deleted key/value pair
 }
 
 func assertStrings(t testing.TB, got, want string) {
