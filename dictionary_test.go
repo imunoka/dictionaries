@@ -9,17 +9,15 @@ func TestDictionary_Search(t *testing.T) {
 	t.Run("existing word", func (t *testing.T) {
 		dictionary := Dictionary{"key": "value"}
 		got, err := dictionary.Search("key")
-
 		want := "value"
 
-		assertNoError(t, err)
+		assertError(t, err, nil)
 		assertStrings(t, got, want)
 	})
 
 	t.Run("non-existing word", func (t *testing.T) {
 		dictionary := Dictionary{}
 		_, err := dictionary.Search("key")
-
 		want := ErrNotFound
 
 		assertError(t, err, want)
@@ -33,7 +31,7 @@ func TestDictionary_Add(t *testing.T) {
 		value := "value"
 		err := dictionary.Add(key, value)
 
-		assertNoError(t, err)
+		assertError(t, err, nil)
 		assertValue(t, dictionary, key, value)
 	})
 
@@ -56,7 +54,7 @@ func TestDictionary_Update(t *testing.T) {
 		newValue := "new value"
 		err := dictionary.Update(key, newValue)
 
-		assertNoError(t, err)
+		assertError(t, err, nil)
 		assertValue(t, dictionary, key, newValue)
 	})
 
@@ -77,9 +75,9 @@ func ExampleDictionary_Search() {
 		return
 	}
 
-	fmt.Println("Found:", value)
+	fmt.Println("found:", value)
 
-	// Output: Found: value
+	// Output: found: value
 }
 
 func ExampleDictionary_Add() {
@@ -97,9 +95,9 @@ func ExampleDictionary_Add() {
 		return
 	}
 
-	fmt.Println("Found:", value)
+	fmt.Println("found:", value)
 
-	// Output: Found: value
+	// Output: found: value
 }
 
 func ExampleDictionary_Update() {
@@ -116,9 +114,9 @@ func ExampleDictionary_Update() {
 		return
 	}
 
-	fmt.Println("Found:", value)
+	fmt.Println("found:", value)
 
-	// Ouput: Found: new value
+	// Ouput: found: new value
 }
 
 func assertStrings(t testing.TB, got, want string) {
@@ -132,20 +130,8 @@ func assertStrings(t testing.TB, got, want string) {
 func assertError(t testing.TB, got, want error) {
 	t.Helper()
 
-	if got == nil {
-		t.Fatal("expected to get an error")
-	}
-
 	if got != want {
 		t.Errorf("got %q, want %q", got, want)
-	}
-}
-
-func assertNoError(t testing.TB, err error) {
-	t.Helper()
-
-	if err != nil {
-		t.Fatal("got an error but did not expect one")
 	}
 }
 
