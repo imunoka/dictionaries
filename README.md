@@ -49,7 +49,7 @@ import (
 )
 
 func main() {
-  dictionary := Dictionary{}
+	dictionary := Dictionary{}
 	err := dictionary.Add("key", "value")
 
 	if err != nil {
